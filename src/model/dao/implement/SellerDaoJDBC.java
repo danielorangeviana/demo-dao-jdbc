@@ -101,15 +101,18 @@ public class SellerDaoJDBC implements SellerDao{
 		
 		while(resultSet.next()) {
 			
+			// Se o departamento existir ele é reaproveitado
 			Department dep = map.get(resultSet.getInt("DepartmentId"));
 			
+			//Se ele for nulo, é instanciado 
 			if(dep == null) {
 				dep = instantiateDepartment(resultSet);
 				map.put(resultSet.getInt("DepartmentId"), dep);
 			}
 			
+			// Assim, é instanciado todos os vendedores sem a repetição dos departamentos
 			Seller obj = instantiateSeller(resultSet, dep);
-			list.add(obj);
+			list.add(obj); // Eincluídos na lista Seller
 		}
 		
 		return list;
@@ -127,8 +130,43 @@ public class SellerDaoJDBC implements SellerDao{
 
 	@Override
 	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement prSt = null;
+		ResultSet rsSet = null;
+		
+		try {
+			prSt = connection.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "ORDER BY Name");
+			
+			rsSet = prSt.executeQuery();
+			
+			List<Seller> list = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap<>();
+			
+			while (rsSet.next()) {
+				
+				Department dep = map.get(rsSet.getInt("DepartmentId"));
+				
+				if(dep == null) {
+					dep = instantiateDepartment(rsSet);
+					map.put(rsSet.getInt("DepartmentId"), dep);
+				}
+				
+				Seller obj = instantiateSeller(rsSet, dep);
+				list.add(obj);
+			}
+			
+		return list;	
+		}
+			catch(SQLException error) {
+				throw new DbException(error.getMessage());
+			}
+				finally {
+					DB.closeStatement(prSt);
+					DB.closeResultSet(rsSet);
+				}
 	}
 	
 	

@@ -25,6 +25,10 @@ public class Program {
 			System.out.println(obj);
 		}
 		
+		System.out.println("\n=== TEST THREE: Seller findByDepartment ===");
+		List<Seller> listFindAll = sellerDao.findAll();
+		for (Seller obj : listFindAll)
+		System.out.println(obj);
 	}
 
 }
