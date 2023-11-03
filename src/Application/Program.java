@@ -31,18 +31,24 @@ public class Program {
 		for (Seller obj : listFindAll)
 		System.out.println(obj);
 		
+		
 		System.out.println("\n=== TEST FOUR: Seller insert ===");
+		/*
 		Seller newSeller = new Seller(null, "Deivson Correa", "deivson@gmail.com", new Date(), 7000.0, department);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted new Id = " + newSeller.getId());
+		*/
 		
-		System.out.println("\n=== TEST FIVE: Seller insert ===");
-		seller = sellerDao.findById(8);
-		seller.setName("Pedro Silva");
-		seller.setEmail("pedro@gmail.com");
+		System.out.println("\n=== TEST FIVE: Seller update ===");
+		seller = sellerDao.findById(11);
+		seller.setName("Dryele Alcantara");
+		seller.setEmail("dryele@gmail.com");
 		sellerDao.update(seller);
 		System.out.println("Update completed!");
 		
+		System.out.println("\n=== TEST SIX: Seller update ===");
+		sellerDao.deleteById(14);
+		System.out.println("Delete completed!");
 	}
 
 }
